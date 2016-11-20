@@ -1,0 +1,33 @@
+(load "compiler/ast")
+
+(import-all "ast")
+
+(define (treat-val val)
+  (++ "\"" (->string (val :value)) "\""))
+
+(define (treat-body body)
+  (cons (->string (map ($ (% :value)) (body :arguments)))
+        (list (treat-val (body :body)))))
+
+(define (write-fn exports fn)
+  (let ((name (get-from fn [:function :value]))
+        (body (get-from fn [:arguments 0])))
+  (write
+    (cons
+      (if (in? exports (get-from fn :function :value)) 'defn 'defn)
+      (cons
+        name
+        (treat-body body))))))
+
+(define (transform modl)
+  (let ((name (get-from modl [:arguments 0 :value]))
+        (exports (map ($ (get-from % [:arguments 0 :arguments 0 :value]))
+                      (get-from modl [:arguments 1 :arguments 0 :arguments]))))
+    (write `(ns ,(string->symbol name)))
+    (map (curry write-fn exports) (drop 2 (get-from modl :arguments)))))
+
+(|> (car zepto:args)
+    parse
+    ast:ast
+    ($ (get-from % :function))
+    transform)

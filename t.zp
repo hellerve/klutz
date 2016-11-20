@@ -1,0 +1,7 @@
+(module "test"
+  (export
+    `("hi" ,hi)
+    `("bye" ,bye))
+
+  (hi (lambda () "Hello Clojure"))
+  (bye (lambda (x) "Bye Clojure")))
