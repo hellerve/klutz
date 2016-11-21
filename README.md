@@ -2,7 +2,7 @@
 
 **Disclaimer: Proof-of-concept software! Probably does not work most of the time.
   It also depends on the bugfixes of the zepto standard module `compiler/ast` that
-  will be in the upcoming version of zepto (`v0.9.7`, if you are reading from the future)**
+  will be in the upcoming version of zepto (`v0.9.7`, if you are reading from the future).**
 
 klutz compiles zepto modules to Clojure namespaces.
 Named `klutz` because `clotz` is not a pun.
