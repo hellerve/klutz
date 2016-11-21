@@ -5,6 +5,8 @@
     `("qq"     ,qq)
     `("collec" ,collec)
     `("nums"   ,nums)
+    `("chrs"  ,chrs)
+    `("bool"   ,bool)
     `("bye"    ,bye))
 
   (hi (lambda () "Hello Clojure"))
@@ -13,4 +15,6 @@
   (addr (lambda (x) (+ x 1)))
   (collec (lambda () [1 #{2 3} {4} b{2}]))
   (nums (lambda () (+ 1 1.1 1/1)))
+  (chrs (lambda () (string #\a #\space #\newline #\tab #\backspace)))
+  (bool (lambda () (eq? #t #f)))
   (bye (lambda (x) "Bye Clojure")))

@@ -19,7 +19,8 @@ then redirect to a file and load with Clojure.
 - [ ] Small integers (currently compiled to `(long <number>)`, has the same problems as above; this
       is probably a theoretical problem, however, as regular zepto has no literals for these numbers)
 - [ ] Standard library/Core function translation (as in, transforming the names of the functions
-      in zepto's standard library to functions from `clojure.core`)
+      in zepto's standard library to functions from `clojure.core` - there is already a minimal
+      structure in `translations.zp`)
 
 <hr/>
 

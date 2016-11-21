@@ -2,6 +2,11 @@
 
 (import-all "ast")
 
+(define SPECIALS (load "translations.zp"))
+
+(define (find-special sym)
+  (get-from SPECIALS (->string sym) sym))
+
 (define (treat-unquote val)
   (++ "~"
     (if (eq? (get-from val [:function :value]) 'unquote-splicing) "@" "")
@@ -32,7 +37,18 @@
 (define (treat-val val)
   (case (val :type)
     ((:string)
-      (++ "\"" (->string (val :value)) "\""))
+        (++ "\"" (val :value) "\""))
+    ((:boolean)
+      (->string (val :value)))
+    ((:char)
+      (let ((quote-special
+              ($ (case %
+                  ((#\backspace)          "backspace")
+                  ((#\newline #\return)   "newline")
+                  ((#\tab)                "tab")
+                  ((#\space)              "space")
+                  (else                   (->string %))))))
+        (++ "\\" (quote-special (val :value)))))
     ((:list)
       (++ "'(" (treat-coll val) ")"))
     ((:hash-map)
@@ -48,7 +64,7 @@
     ((:application)
       (if (eq? (get-from val [:function :value]) 'quasiquote)
         (treat-qq (val :arguments))
-        `(,(get-from val [:function :value]) ,@(map treat-val (val :arguments)))))
+        `(,(find-special (get-from val [:function :value])) ,@(map treat-val (val :arguments)))))
     (else (val :value))))
 
 (define (treat-body body)
