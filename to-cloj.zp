@@ -3,7 +3,12 @@
 (import-all "ast")
 
 (define (treat-val val)
-  (++ "\"" (->string (val :value)) "\""))
+  (case (val :type)
+    ((:string)
+      (++ "\"" (->string (val :value)) "\""))
+    ((:application)
+      `(,(get-from val [:function :value]) ,@(map treat-val (val :arguments))))
+    (else (val :value))))
 
 (define (treat-body body)
   (cons (->string (map ($ (% :value)) (body :arguments)))
@@ -14,15 +19,18 @@
         (body (get-from fn [:arguments 0])))
   (write
     (cons
-      (if (in? exports (get-from fn :function :value)) 'defn 'defn)
+      (if (in? exports (get-from fn [:function :value])) 'defn 'defn-)
       (cons
         name
         (treat-body body))))))
 
+(define (extract-name qq)
+  (get-from qq [:arguments 0 :arguments 0 :arguments 0 :value]))
+
 (define (transform modl)
   (let ((name (get-from modl [:arguments 0 :value]))
-        (exports (map ($ (get-from % [:arguments 0 :arguments 0 :value]))
-                      (get-from modl [:arguments 1 :arguments 0 :arguments]))))
+        (exports (map ($ extract-name
+                         (get-from modl [:arguments 1 :arguments]))))
     (write `(ns ,(string->symbol name)))
     (map (curry write-fn exports) (drop 2 (get-from modl :arguments)))))
 

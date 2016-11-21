@@ -4,4 +4,5 @@
     `("bye" ,bye))
 
   (hi (lambda () "Hello Clojure"))
+  (internal (lambda () (+ 1 1)))
   (bye (lambda (x) "Bye Clojure")))
