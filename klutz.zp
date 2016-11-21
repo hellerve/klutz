@@ -34,6 +34,10 @@
 (define (treat-coll val)
   (string:join (map ($ (->string (treat-val %))) (val :value)) " "))
 
+(define (translate-colons val)
+  "translate the colons to dots and the last one to a slash"
+  (regex:gsub r/\.(?!.*\.)/ "/" (regex:gsub r/:/ "." (->string val))))
+
 (define (treat-val val)
   (case (val :type)
     ((:string)
@@ -61,10 +65,12 @@
       (error:from-string "Complex numbers are not supported by this backend"))
     ((:byte-vector)
       (++ "(into-array Byte/TYPE (map byte [" (treat-coll val) "]))"))
+    ((:symbol)
+      (translate-colons (find-special (val :value))))
     ((:application)
       (if (eq? (get-from val [:function :value]) 'quasiquote)
         (treat-qq (val :arguments))
-        `(,(find-special (get-from val [:function :value])) ,@(map treat-val (val :arguments)))))
+        `(,(treat-val (get-from val :function)) ,@(map treat-val (val :arguments)))))
     (else (val :value))))
 
 (define (treat-body body)

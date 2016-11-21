@@ -23,6 +23,7 @@ then redirect to a file and load with Clojure.
 - [ ] Standard library/Core function translation (as in, transforming the names of the functions
       in zepto's standard library to functions from `clojure.core` - there is already a minimal
       structure in `translations.zp`)
+- [ ] imports (is there even a good way to do that?)
 
 <hr/>
 

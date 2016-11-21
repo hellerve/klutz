@@ -5,7 +5,7 @@
     `("qq"     ,qq)
     `("collec" ,collec)
     `("nums"   ,nums)
-    `("chrs"  ,chrs)
+    `("chrs"   ,chrs)
     `("bool"   ,bool)
     `("bye"    ,bye))
 
