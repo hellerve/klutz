@@ -4,6 +4,7 @@
     `("addr"   ,addr)
     `("qq"     ,qq)
     `("collec" ,collec)
+    `("nums"   ,nums)
     `("bye"    ,bye))
 
   (hi (lambda () "Hello Clojure"))
@@ -11,4 +12,5 @@
   (qq (lambda (x y) `(x ,y ,@y)))
   (addr (lambda (x) (+ x 1)))
   (collec (lambda () [1 #{2 3} {4} b{2}]))
+  (nums (lambda () (+ 1 1.1 1/1)))
   (bye (lambda (x) "Bye Clojure")))

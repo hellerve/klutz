@@ -13,10 +13,11 @@ then redirect to a file and load with Clojure.
 
 ## To Do
 
-- [ ] Small integers
-- [ ] Complex numbers
+- [ ] Complex numbers (using them throws an error for now)
 - [ ] Byte vectors (currently compiled to `(into-array Byte/TYPE (map byte [<contents>]))`, but
       that is suboptimal - I think - and won't work if quoted)
+- [ ] Small integers (currently compiled to `(long <number>)`, has the same problems as above; this
+      is probably a theoretical problem, however, as regular zepto has no literals for these numbers)
 - [ ] Standard library/Core function translation (as in, transforming the names of the functions
       in zepto's standard library to functions from `clojure.core`)
 
