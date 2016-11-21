@@ -2,12 +2,33 @@
 
 (import-all "ast")
 
+(define (treat-unquote val)
+  (++ "~"
+    (if (eq? (get-from val [:function :value]) 'unquote-splicing) "@" "")
+    (->string (treat-val (get-from val [:arguments 0])))))
+
+(define (treat-qq args)
+  "dirty fix for AST imperfections"
+  (let ((args (car args)))
+    (define (treat-val-or-unquote val)
+      (if (and (eq? (val :type) :application)
+               (in? [unquote unquote-splicing]
+                    (get-from val [:function :value])))
+        (treat-unquote val)
+        (treat-val val)))
+
+    (++ "`(" (->string (treat-val-or-unquote (args :function))) " "
+        (string:join (map ($ (->string (treat-val-or-unquote %))) (args :arguments)) " ")
+        ")")))
+
 (define (treat-val val)
   (case (val :type)
     ((:string)
       (++ "\"" (->string (val :value)) "\""))
     ((:application)
-      `(,(get-from val [:function :value]) ,@(map treat-val (val :arguments))))
+      (if (eq? (get-from val [:function :value]) 'quasiquote)
+        (treat-qq (val :arguments))
+        `(,(get-from val [:function :value]) ,@(map treat-val (val :arguments)))))
     (else (val :value))))
 
 (define (treat-body body)
@@ -29,8 +50,8 @@
 
 (define (transform modl)
   (let ((name (get-from modl [:arguments 0 :value]))
-        (exports (map ($ extract-name
-                         (get-from modl [:arguments 1 :arguments]))))
+        (exports (map extract-name
+                      (get-from modl [:arguments 1 :arguments]))))
     (write `(ns ,(string->symbol name)))
     (map (curry write-fn exports) (drop 2 (get-from modl :arguments)))))
 
