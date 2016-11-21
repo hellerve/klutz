@@ -1,0 +1,4 @@
+#{"eq?" =
+  "string" str
+  "curry" partial
+  "compose" comp}
