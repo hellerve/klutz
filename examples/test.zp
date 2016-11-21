@@ -1,11 +1,14 @@
 (module "test"
   (export
-    `("hi" ,hi)
-    `("addr" ,addr)
-    `("bye" ,bye))
+    `("hi"     ,hi)
+    `("addr"   ,addr)
+    `("qq"     ,qq)
+    `("collec" ,collec)
+    `("bye"    ,bye))
 
   (hi (lambda () "Hello Clojure"))
   (internal (lambda () (+ 1 1)))
   (qq (lambda (x y) `(x ,y ,@y)))
   (addr (lambda (x) (+ x 1)))
+  (collec (lambda () [1 #{2 3} {4} b{2}]))
   (bye (lambda (x) "Bye Clojure")))

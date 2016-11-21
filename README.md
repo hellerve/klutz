@@ -13,8 +13,12 @@ then redirect to a file and load with Clojure.
 
 ## To Do
 
-Probably a lot. I haven't tested it much and have no overview what works and what doesn't.
-I'm pretty sure collections won't work yet.
+- [ ] Small integers
+- [ ] Complex numbers
+- [ ] Byte vectors (currently compiled to `(into-array Byte/TYPE (map byte [<contents>]))`, but
+      that is suboptimal - I think - and won't work if quoted)
+- [ ] Standard library/Core function translation (as in, transforming the names of the functions
+      in zepto's standard library to functions from `clojure.core`)
 
 <hr/>
 
